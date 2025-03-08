@@ -6,9 +6,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
 
+// Halaman Home
 Route::get('/', [HomeController::class, 'index']);
 
-
+// Halaman Products (route prefix)
 Route::prefix('category')->group(function () {
     Route::get('/food-beverage', [ProductController::class, 'foodBeverage']);
     Route::get('/beauty-health', [ProductController::class, 'beautyHealth']);
@@ -16,8 +17,8 @@ Route::prefix('category')->group(function () {
     Route::get('/baby-kid', [ProductController::class, 'babyKid']);
 });
 
-
+// Halaman User (route dengan parameter)
 Route::get('/user/{id}/name/{name}', [UserController::class, 'show']);
 
-
-Route::get('/Sales', [SalesController::class, 'index']);
+// Halaman Penjualan (POS)
+Route::get('/sales', [SalesController::class, 'index']);
