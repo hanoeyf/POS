@@ -16,13 +16,14 @@ Route::get('/', function () {
 
 
 Route::get('/level', [LevelController::class, 'index']);
-
+Route::get('/kategori', [KategoriController::class, 'index']);
+Route::get('/user', [userController::class, 'index']);
 // Route::get('/', function(){
 //     return view('welcome');
 // });
 
 // // Route::get('/level', [LevelController::class, 'index']);
-// Route::get('/kategori', [KategoriController::class, 'index']);
+
 
 // // Halaman Home
 // Route::get('/', [HomeController::class, 'index']);
