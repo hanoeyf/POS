@@ -24,25 +24,30 @@ class UserController extends Controller
 
     $activeMenu = 'user'; // set menu yang sedang aktif
 
-    return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+    $level = LevelModel::all();
+
+    return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' =>$level, 'activeMenu' => $activeMenu]);
+    dd($level);
+
 }
 // Ambil data user dalam bentuk json untuk datatables
 public function list(Request $request)
 {
     $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
         ->with('level'); // Pastikan hanya mengambil field yang dibutuhkan
-
+    if($request->level_id){
+        $users = $users->where('level_id', $request->level_id);
+    }
     return DataTables::of($users)
         ->addIndexColumn()
-        ->addColumn('level_nama', function ($user) {
-            return $user->level ? $user->level->nama : 'Tidak Ada Level';
-        })
         ->addColumn('aksi', function ($user) {
             $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a> ';
             $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
-            $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/' . $user->user_id).'">'
+            $btn .= '<form class="d-inline-block" method="POST" action="'.
+            url('/user/' . $user->user_id).'">'
                 . csrf_field() . method_field('DELETE') .
-                '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
+                '<button type="submit" class="btn btn-danger btn-sm" onclick="return 
+                confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
             return $btn;
         })
         ->rawColumns(['aksi'])
@@ -100,10 +105,6 @@ public function show(string $id)
 {
     $user = UserModel::with('level')->find($id);
 
-    if (!$user) {
-        return redirect('/user')->with('error', 'User tidak ditemukan!');
-    }
-
     $breadcrumb = (object) [
         'title' => 'Detail User',
         'list' => ['Home', 'User', 'Detail']
@@ -115,12 +116,12 @@ public function show(string $id)
 
     $activeMenu = 'user';
 
-    return view('user.show', compact('breadcrumb', 'page', 'user', 'activeMenu'));
+    return view('user.show', ['breadcrumb'=> $breadcrumb, 'page'=>$page, 'user'=>$user, 'activeMenu' =>$activeMenu]);
 }
 
-public function edit(string $level_id)
+public function edit(string $id)
 {
-    $user = UserModel::find($level_id);
+    $user = UserModel::find($id);
     $level = LevelModel::all();
 
     $breadcrumb = (object) [
@@ -161,7 +162,7 @@ public function update(Request $request, string $id)
         'level_id' => $request->level_id
     ]);
 
-    return redirect('user')->with('success', 'Data user berhasil diubah');
+    return redirect('/user')->with('success', 'Data user berhasil diubah');
 }
 // Menghapus data user
 public function destroy(string $id)

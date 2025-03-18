@@ -76,7 +76,7 @@
 <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('adminlte/plugins/datatables-buttons/js/buttons.colvis.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('adminlte/dist/js/adminlte.min.j') }}s"></script>
+<script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
 <script>
     // Untuk mengirimkan token Laravel CSRF pada setiap request ajax
     $.ajaxSetup({

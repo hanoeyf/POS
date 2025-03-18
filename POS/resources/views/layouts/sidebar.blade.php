@@ -1,5 +1,5 @@
 <div class="sidebar">
-    <!-- Sidebar Search Form -->
+    <!-- SidebarSearch Form -->
     <div class="form-inline mt-2">
         <div class="input-group" data-widget="sidebar-search">
             <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -44,7 +44,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-list-alt"></i>
+                    <i class="nav-icon far fa-list-alt"></i>
                     <p>Data Barang</p>
                 </a>
             </li>
