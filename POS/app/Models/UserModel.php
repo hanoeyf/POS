@@ -14,6 +14,8 @@ class UserModel extends Model
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
+    protected $keyType = 'int'; 
+    public $incrementing = true;
 
      /**
      * @var array

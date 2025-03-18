@@ -11,6 +11,20 @@ use App\Http\Controllers\KategoriController;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/list', [UserController::class, 'list']); // Hapus /user/ yang berlebihan
+    Route::get('/list', [UserController::class, 'list']);  // Tambahkan GET jika perlu
+    Route::get('/create', [UserController::class, 'create']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);  // Hapus /user/ yang berlebihan
+    Route::get('/{id}/edit', [UserController::class, 'edit']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+    
+});
+
 // Route::get('/user/tambah', [UserController::class, 'tambah']);
 // Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
 
