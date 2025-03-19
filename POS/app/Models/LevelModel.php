@@ -1,23 +1,24 @@
 <?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
-class LevelModel extends Model
-{
-    use HasFactory;
-
-    protected $table = 'm_level'; 
-    protected $primaryKey = 'level_id';
-    public $timestamps = false;
-
-    protected $fillable = ['level_id', 'level_name'];
-
-    public function users(): HasMany
-    {
-        return $this->hasMany(UserModel::class, 'level_id', 'level_id');
-    }
-}
+ 
+ namespace App\Models;
+ 
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Relations\HasOne;
+ 
+ class LevelModel extends Model
+ {
+     use HasFactory;
+     protected $table = 'm_level'; // Nama tabel di database
+     protected $primaryKey = 'level_id'; // Primary key
+     public $timestamps = false; // Jika tidak ada created_at & updated_at
+ 
+     protected $fillable = ['level_kode', 'level_nama']; 
+ 
+     // Relasi One to One ke UserModel
+     public function user(): HasOne
+     {
+         return $this->hasMany(UserModel::class, 'level_id', 'level_id');
+     }
+ }
+ 
