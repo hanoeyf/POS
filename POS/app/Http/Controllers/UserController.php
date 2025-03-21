@@ -44,6 +44,7 @@ public function list(Request $request)
     return DataTables::of($users)
         ->addIndexColumn()
         ->addColumn('aksi', function ($user) {
+            
             // $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a> ';
             // $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
             // $btn .= '<form class="d-inline-block" method="POST" action="'.
@@ -56,8 +57,8 @@ public function list(Request $request)
                         class="btn btn-info btn-sm">Detail</button> ';
             $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/edit_ajax') . '\')" 
                         class="btn btn-warning btn-sm">Edit</button> ';
-            $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/delete_ajax') . '\')" 
-                        class="btn btn-danger btn-sm">Hapus</button> ';
+            $btn .= '<button class="btn btn-danger btn-sm delete-user" data-id="' . $user->user_id . '">Hapus</button>';
+
             return $btn;
         })
         ->rawColumns(['aksi']) // Menandakan bahwa kolom aksi berisi HTML
@@ -278,6 +279,34 @@ public function update_ajax(Request $request, $id)
     }
     return redirect('/');
 }
+public function confirm_ajax(string $id)
+{
+    $user = UserModel::find($id);
+
+    return view('user.delete_ajax', ['user' => $user]);
 
 }
-    
+public function delete_ajax(Request $request, $id)
+{
+    // Cek apakah request berasal dari AJAX
+    if ($request->ajax() || $request->wantsJson()) {
+        $user = UserModel::find($id);
+
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data berhasil dihapus'
+            ]);
+        } else {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Data tidak ditemukan'
+            ]);
+        }
+    }
+
+    return redirect('/');
+}
+
+}

@@ -49,40 +49,58 @@
             </table>
         </div>
     </div>
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-
-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
-@endsection
 
-@push('css')
-@endpush
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+@endsection
 
 @push('js')
 <script>
     function modalAction(url='') {
-        $('#myModal').load(url,function() {
+        $('#myModal .modal-content').load(url, function() {
             $('#myModal').modal('show');
         });
     }
 
     var dataUser;
+    $(document).on('click', '.delete-user', function() {
+    var userId = $(this).data('id'); // Ambil ID user dari tombol
+    if (confirm("Apakah Anda yakin ingin menghapus user ini?")) {
+        $.ajax({
+            url: '/user/' + userId + '/delete_ajax',
+            type: 'DELETE',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+            },
+            success: function(response) {
+                alert(response.success);
+                dataUser.ajax.reload(); // Refresh DataTable setelah hapus
+            },
+            error: function(xhr) {
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    }
+});
+
     $(document).ready(function() {
         dataUser = $('#table_user').DataTable({
+            processing: true,
             serverSide: true,
             ajax: {
-                "url": "{{ url('user/list') }}",
-                "dataType": "json",
-                "type": "POST",
-                "data": function (d) {
+                url: "{{ url('user/list') }}",
+                type: "POST",
+                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+                data: function (d) {
                     d.level_id = $('#level_id').val();
                 },
             },
             columns: [
-                {
-                    data: "DT_RowIndex",
-                    className: "text-center",
-                    orderable: false,
-                    searchable: false
-                },
+                { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
                 { data: "username", orderable: true, searchable: true },
                 { data: "nama", orderable: true, searchable: true },
                 { data: "level.level_nama", orderable: false, searchable: false },
@@ -91,7 +109,9 @@ backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></di
         });
 
         $('#level_id').on('change', function(){
-            dataUser.ajax.reload();
+            if ($.fn.DataTable.isDataTable('#table_user')) {
+                dataUser.ajax.reload();
+            }
         }); 
     });
 </script>
