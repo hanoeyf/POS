@@ -20,12 +20,15 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/list', [UserController::class, 'list']); // Hapus /user/ yang berlebihan
     Route::get('/create', [UserController::class, 'create']);
     Route::post('/', [UserController::class, 'store']);
+    Route::get('/create_ajax', [UserController::class, 'create_ajax']);
+    Route::post('/user/ajax', [UserController::class, 'store_ajax']);
     Route::get('/{id}', [UserController::class, 'show']);  // Hapus /user/ yang berlebihan
     Route::get('/{id}/edit', [UserController::class, 'edit']);
     Route::put('/{id}', [UserController::class, 'update']);
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']);
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
-    
 });
 Route::group(['prefix' => 'level'], function () {
     Route::get('/', [LevelController::class, 'index']);
@@ -74,6 +77,8 @@ Route::group(['prefix' => 'barang'], function () {
     Route::put('/{id}', [BarangController::class, 'update']);
     Route::delete('/{id}', [BarangController::class, 'destroy']);
 });
+
+Route::get('/user/create_ajax', [UserController::class, 'create_ajax']);
 
 // Route::get('/user/tambah', [UserController::class, 'tambah']);
 // Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);

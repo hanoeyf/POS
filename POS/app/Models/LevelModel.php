@@ -15,10 +15,6 @@
  
      protected $fillable = ['level_kode', 'level_nama']; 
  
-     // Relasi One to One ke UserModel
-     public function user(): HasOne
-     {
-         return $this->hasMany(UserModel::class, 'level_id', 'level_id');
-     }
+    
  }
  
