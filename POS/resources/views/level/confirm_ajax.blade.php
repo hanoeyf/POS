@@ -49,15 +49,17 @@
 
     var dataLevel;
     $(document).on('click', '.delete-level', function() {
-        var levelId = $(this).data('id');
+        var levelId = $(this).data('id'); // Ambil ID level dari tombol
         if (confirm("Apakah Anda yakin ingin menghapus level ini?")) {
             $.ajax({
                 url: '/level/' + levelId + '/delete_ajax',
                 type: 'DELETE',
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                },
                 success: function(response) {
                     alert(response.success);
-                    dataLevel.ajax.reload();
+                    dataLevel.ajax.reload(); // Refresh DataTable setelah hapus
                 },
                 error: function(xhr) {
                     alert('Error: ' + xhr.responseText);
@@ -73,7 +75,7 @@
             ajax: {
                 url: "{{ url('level/list') }}",
                 type: "POST",
-                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" },
+                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}" }
             },
             columns: [
                 { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
