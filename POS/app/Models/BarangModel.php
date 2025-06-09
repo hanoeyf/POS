@@ -13,4 +13,9 @@ class BarangModel extends Model
     public $timestamps = false; // Jika tidak ada created_at & updated_at
 
     protected $fillable = ['kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual'];
+    public function kategori()
+{
+    return $this->belongsTo(KategoriModel::class, 'kategori_id', 'kategori_id');
+}
+
 }

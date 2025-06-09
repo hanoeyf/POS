@@ -7,11 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\LevelModel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
-class UserModel extends Authenticatable
+class UserModel extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
@@ -35,6 +43,10 @@ class UserModel extends Authenticatable
     public function hasRole($role):bool
     {
         return $this->level->level_kode == $role;
+    }
+    public function getRole()
+    {
+        return $this->level->level_kode;
     }
 
 }
