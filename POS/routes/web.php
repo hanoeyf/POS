@@ -20,8 +20,6 @@ Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
-Route::get('/register',  App\Http\Controllers\Api\RegisterController::class, )->name('register');
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index']); 
 
